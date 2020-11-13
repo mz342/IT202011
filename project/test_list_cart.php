@@ -8,14 +8,14 @@ if (!has_role("Admin")) {
 ?>
 <?php
 $query = "";
-$id=null;
+$id=get_user_id();
 $results = [];
 if (isset($_POST["query"])) {
     $query = $_POST["query"];
 }
 if (isset($_POST["search"]) && !empty($query)) {
     $db = getDB();
-    $stmt = $db->prepare("SELECT product_id, name From Cart JOIN Products on Cart.product_id = Products.id where Cart.user_id=:user_id and Products.name like :q LIMIT 10");
+    $stmt = $db->prepare("SELECT product_id, name, Cart.id, Cart.quantity From Cart JOIN Products on Cart.product_id = Products.id where Cart.user_id=:user_id and Products.name like :q LIMIT 10");
     $r = $stmt->execute([
         ":q" => "%$query%",
         ":user_id"=> $id,
@@ -40,15 +40,15 @@ if (isset($_POST["search"]) && !empty($query)) {
                 <div class="list-group-item">
                     <div>
                         <div>Name:</div>
-                        <div><?php safer_echo($r["Products.name"]); ?></div>
+                        <div><?php safer_echo($r["name"]); ?></div>
                     </div>
                     <div>
                         <div>Product ID:</div>
-                        <div><?php safer_echo($r["Cart.product_id"]); ?></div>
+                        <div><?php safer_echo($r["product_id"]); ?></div>
                     </div>
                     <div>
                         <div>Quantity:</div>
-                        <div><?php safer_echo($r["Cart.quantity"]); ?></div>
+                        <div><?php safer_echo($r["quantity"]); ?></div>
                     </div>
                     <div>
                         <a type="button" href="test_edit_cart.php?id=<?php safer_echo($r['id']); ?>">Edit</a>
@@ -61,3 +61,4 @@ if (isset($_POST["search"]) && !empty($query)) {
         <p>No results</p>
     <?php endif; ?>
 </div>
+<?php require(__DIR__ . "/partials/flash.php");
