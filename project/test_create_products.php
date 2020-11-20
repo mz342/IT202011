@@ -1,4 +1,4 @@
-<?php require_once(__DIR__ . "/partials/nav.php"); ?>
+ <?php require_once(__DIR__ . "/partials/nav.php"); ?>
 <?php
 if (!has_role("Admin")) {
     //this will redirect to login and kill the rest of this script (prevent it from executing)
@@ -16,6 +16,10 @@ if (!has_role("Admin")) {
 	<input type="number" min="0" name="quantity"/>
 	<label>Description</label>
 	<input type="text" name="description"/>
+	<label>Category</label>
+	<input type="text" name="category"/>
+	<label>Visibility</label>
+	<input type="number" min="0" name="visibility"/>
 	<input type="submit" name="save" value="Create"/>
 </form>
 
@@ -28,15 +32,19 @@ if(isset($_POST["save"])){
 	$quantity = $_POST["quantity"];
 	$desc = $_POST["description"];
 	//$nst = date('Y-m-d H:i:s');//calc
+	$category = $_POST["category"];
+	$visibility = $_POST["visibility"];
 	$user = get_user_id();
 	$db = getDB();
-	$stmt = $db->prepare("INSERT INTO Products (name, price, quantity, description, user_id) VALUES(:name, :pr, :quantity, :desc, :user)");
+	$stmt = $db->prepare("INSERT INTO Products (name, price, quantity, description, category, visibility, user_id) VALUES(:name, :pr, :quantity, :desc, :category, :visibility, :user)");
 	$r = $stmt->execute([
 		":name"=>$name,
 		":pr"=>$pr,
 		":quantity"=>$quantity,
 		":desc"=>$desc,
 		//":nst"=>$nst,
+		":category"=>$category,
+		":visibility"=>$visibility,
 		":user"=>$user
 	]);
 	if($r){
