@@ -64,7 +64,6 @@ if (isset($product_id)) {
       <div class="row row-cols-1 row-cols-md-2">
         <div class="col mb-4">
           <div class="card">
-            <img src="..." class="card-img-top" alt="...">
             <div class="card-body">
               <h5 class="card-title"> <?php safer_echo($result["name"]); ?></h5>
               <p class="card-text">$<?php safer_echo($result["price"])?></p>
@@ -76,7 +75,7 @@ if (isset($product_id)) {
 
 
             <form method="POST" >
-              <select class="form-control" id="quantity" name="quantity" style= "width: 50;">
+              <select class="form-control" id="quantity" name="quantity" style= "width: 60;">
                 <option>1</option>
                 <option>2</option>
                 <option>3</option>
