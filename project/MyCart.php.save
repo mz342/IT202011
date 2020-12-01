@@ -83,6 +83,7 @@ foreach($results as $a){
 <table class="table table-striped">
   <thead>
     <tr>
+      <th scope="col"></th>
       <th scope="col">Product Name</th>
       <th scope= "col">Price</th>
       <th scope="col">quantity</th>
@@ -96,7 +97,8 @@ foreach($results as $a){
     <?php if (count($results) > 0): ?>
       <?php foreach ($results as $r): ?>
     <tr>
-      <td><a href = "test_view_products.php?id=<?php safer_echo($r['product_id']); ?>"> <?php safer_echo($r["name"])?></a></td>
+      <th scope="row"> <img src="..." class="card-img" alt="..."><p class="card-text"><small class="text-muted"> <?php safer_echo($r["modified"])?></small></p></th>
+      <td><a href = "ViewProduct.php?id=<?php safer_echo($r['product_id']); ?>"> <?php safer_echo($r["name"])?></a></td>
       <td>$<?php safer_echo($r["price"])?></td>
       <td><form method = "POST"  id = "1" style = "display: flex;">
         <input  style = "width: 80;" type="number" min="0" name="quantity" value="<?php echo $r["quantity"];?>"/>
@@ -105,14 +107,14 @@ foreach($results as $a){
       </form></td>
       <td><?php safer_echo($r["description"])?></td>
       <td>$<?php safer_echo($r["sub"])?></td>
-      <td><button form= "1" type="submit" class="btn btn-danger" name="delete" value="Delete Cart Item">Remove</button></td>
+      <td><button form= "1" type="submit" class="btn btn-danger" name="delete" value="Delete Cart Item">Delete item</button></td>
     </tr>
   <?php endforeach; ?>
   <tr>
     <td>total: $<?php safer_echo($total)?></td>
   </tr>
   <?php else: ?>
-      <p>Cart is Empty</p>
+      <p>No results, Cart is Empty</p>
   <?php endif; ?>
   </tbody>
 </table>

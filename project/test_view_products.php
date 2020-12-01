@@ -47,11 +47,11 @@ if (isset($product_id)) {
                 }
             }
         };
-        xhttp.open("POST", "<?php echo "add_to_cart.php";?>", true);
+        xhttp.open("POST", "<?php echo "api/add_to_cart.php";?>", true);
         //this is required for post ajax calls to submit it as a form
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         //map any key/value data similar to query params
-        xhttp.send("product_id="+product_id);
+        xhttp.send("itemId="+product_id);
     }
 </script>
 
