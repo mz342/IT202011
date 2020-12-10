@@ -96,13 +96,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <br>
 <br>
 
-</div>
-
-  <div class="form-group3">
-    <label for="exampleFormControlTextarea1">Example textarea</label>
-    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-       </div>
-  </div>
 </form>
 
 <button id="placeOrder" type="submit" name="submit" value="Submit">Place Order</button>
