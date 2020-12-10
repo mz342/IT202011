@@ -79,6 +79,9 @@ foreach($results as $a){
 <form method = "POST">
   <button style= "margin: 1em; float: right;" type="submit" class="btn btn-danger" name="clear">clear cart</button>
 </form>
+<form method = "POST">
+  <a style= "margin: 1em; float: right;" type="submit" class="btn btn-danger" href="checkout.php" name="checkout">checkout</a>
+</form>
 
 <table class="table table-striped">
   <thead>
