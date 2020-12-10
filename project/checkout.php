@@ -15,7 +15,7 @@ $db = getDB();
 $stmt = $db->prepare("SELECT c.id,c.product_id,c.quantity,c.price, Product.name as product FROM Cart as c JOIN Users on c.user_id = Users.id LEFT JOIN Products Product on Product.id = c.product_id where c.user_id = :id ORDER by product");
 $r = $stmt->execute([":id" => $userID]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+?>
 <form>
   <div class="form-group1">
 
@@ -51,7 +51,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <br>
 
-//shh
     <div class="results">
         <div class="list-group">
             <div>
@@ -118,7 +117,7 @@ if(isset($_POST["submit"])) {
     if(isset($_POST["payment"])){
         $payment = $_POST["payment"];
         if($payment==-1){
-            flash("Please select a valid payment method.");
+            flash("Please select a payment method.");
         }
     }
     $streetAdr = $_POST["adr"];
@@ -126,7 +125,7 @@ if(isset($_POST["submit"])) {
     if (gettype($words[0] == "integer") && (sizeof($words) >= 3) && (is_string($_POST["city"])) && (is_string($_POST["state"]))) {
         $adr = $_POST["adr"] . ", " . $_POST["city"] . ", " .$_POST["state"]."  ".$_POST["zip"];
     } else {
-        flash("Please enter a valid address.");
+        flash("Please enter an  address.");
     }
     $db = getDB();
     $stmt = $db->prepare("SELECT Cart.product_id,Cart.quantity,Products.name,Products.quantity as inventory FROM Cart Join Products on Cart.product_id = Products.id JOIN Users on Cart.user_id = Users.id where Cart.user_id=:id");
@@ -136,7 +135,7 @@ if(isset($_POST["submit"])) {
     $validOrder = true;
     foreach($items as $item):
         if($item["quantity"]>$item["inventory"]){
-            flash("Sorry, there are only ".$item["inventory"]." ".$item["name"]." left in stock, please update your cart.");
+            flash("Sorry, there are only ".$item["inventory"]." ".$item["name"]." left in stock, update your cart please.");
             $validOrder = false;
         }elseif($item["inventory"]==0){
             flash("Sorry, ".$item["name"]." is out of stock.");
