@@ -25,7 +25,6 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <div class="form-group2">
     <label for="card type">Card Type</label>
     <select class="form-control" id="exampleFormControlSelect1">
-        <option value="visa">Visa</option>
         <option value="discover">Discover</option>
         <option value="paypal">Paypal</option>
         <option value="visa">Visa</option>    </select>
