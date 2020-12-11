@@ -15,29 +15,25 @@ $db = getDB();
 $stmt = $db->prepare("SELECT c.id,c.product_id,c.quantity,c.price, Product.name as product FROM Cart as c JOIN Users on c.user_id = Users.id LEFT JOIN Products Product on Product.id = c.product_id where c.user_id = :id ORDER by product");
 $r = $stmt->execute([":id" => $userID]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-<form>
+?>
+<form method = "POST">
   <div class="form-group1">
 
-<h1 >1. Payment Method</h1>
+<h1 > Payment Method</h1>
 
   </div>
   <div class="form-group2">
     <label for="card type">Card Type</label>
-    <select class="form-control" id="exampleFormControlSelect1">
-        <option value="visa">Visa</option>
+    <select class="form-control" name="payment">
         <option value="discover">Discover</option>
         <option value="paypal">Paypal</option>
-        <option value="visa">Visa</option>    </select>
+        <option value="visa">Visa</option>    </select> 
 <br>
   </div>
-<h2> 2.Shipping Information</h2>
+<h2> Shipping Information</h2>
  </div>
   <div class="form-group3" style="width 40;">
-        <input type="text" name="addressLine1" class="form-control" placeholder="Address Line1"
-  </div>
-  <div class="form-group3" style="width 40;">
-        <input type="text" name="addressLine2" class="form-control" placeholder="Address Line2"
+        <input type="text" name="address" class="form-control" placeholder="Address Line"
   </div>
   <div class="form-group3" style="width 40;">
         <input type="text" name="city" class="form-control" placeholder="City"
@@ -51,11 +47,10 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <br>
 
-//shh
     <div class="results">
         <div class="list-group">
             <div>
-                <div><h3> 3. Review Products</h3></div>
+                <div><h3> Review Products</h3></div>
             </div>
             <div>
                 <br>
@@ -98,14 +93,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </form>
 
-<button id="placeOrder" type="submit" name="submit" value="Submit">Place Order</button>
+    <button id="placeOrder" type="submit" class="btn btn-primary"  name="submit" value="Submit">Place Order</button>
 
 <?php
-
-
-
-
-
 
 
 if(isset($_POST["submit"])) {
@@ -118,15 +108,15 @@ if(isset($_POST["submit"])) {
     if(isset($_POST["payment"])){
         $payment = $_POST["payment"];
         if($payment==-1){
-            flash("Please select a valid payment method.");
+            flash("Please select a payment method.");
         }
     }
-    $streetAdr = $_POST["adr"];
+    $streetAdr = $_POST["address"];
     $words = explode(" ", $streetAdr);
     if (gettype($words[0] == "integer") && (sizeof($words) >= 3) && (is_string($_POST["city"])) && (is_string($_POST["state"]))) {
-        $adr = $_POST["adr"] . ", " . $_POST["city"] . ", " .$_POST["state"]."  ".$_POST["zip"];
+        $adr = $_POST["address"] . ", " . $_POST["city"] . ", " .$_POST["state"]."  ".$_POST["zip"];
     } else {
-        flash("Please enter a valid address.");
+        flash("Please enter an  address.");
     }
     $db = getDB();
     $stmt = $db->prepare("SELECT Cart.product_id,Cart.quantity,Products.name,Products.quantity as inventory FROM Cart Join Products on Cart.product_id = Products.id JOIN Users on Cart.user_id = Users.id where Cart.user_id=:id");
@@ -136,7 +126,7 @@ if(isset($_POST["submit"])) {
     $validOrder = true;
     foreach($items as $item):
         if($item["quantity"]>$item["inventory"]){
-            flash("Sorry, there are only ".$item["inventory"]." ".$item["name"]." left in stock, please update your cart.");
+            flash("Sorry, there are only ".$item["inventory"]." ".$item["name"]." left in stock, update your cart please.");
             $validOrder = false;
         }elseif($item["inventory"]==0){
             flash("Sorry, ".$item["name"]." is out of stock.");
@@ -147,7 +137,7 @@ if(isset($_POST["submit"])) {
     if ($adr && ($payment!="-1") && $validOrder) {
 
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Orders (user_id,total_price,created,address,payment_method) VALUES(:user,:price,:cr,:adr,:pay)");
+        $stmt = $db->prepare("INSERT INTO Orders (user_id,price,created,address,PaymentMethod) VALUES(:user,:price,:cr,:adr,:pay)");
         $r = $stmt->execute([
             ":user"=>$id,
             ":price"=>$price,
@@ -196,7 +186,6 @@ if(isset($_POST["submit"])) {
 }
 
 ?>
-
 
 
 
