@@ -16,7 +16,7 @@ $stmt = $db->prepare("SELECT c.id,c.product_id,c.quantity,c.price, Product.name 
 $r = $stmt->execute([":id" => $userID]);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<form>
+<form method = "POST">
   <div class="form-group1">
 
 <h1 > Payment Method</h1>
@@ -24,19 +24,16 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
   <div class="form-group2">
     <label for="card type">Card Type</label>
-    <select class="form-control" id="exampleFormControlSelect1">
+    <select class="form-control" name="payment">
         <option value="discover">Discover</option>
         <option value="paypal">Paypal</option>
-        <option value="visa">Visa</option>    </select>
+        <option value="visa">Visa</option>    </select> 
 <br>
   </div>
 <h2> Shipping Information</h2>
  </div>
   <div class="form-group3" style="width 40;">
-        <input type="text" name="addressLine1" class="form-control" placeholder="Address Line1"
-  </div>
-  <div class="form-group3" style="width 40;">
-        <input type="text" name="addressLine2" class="form-control" placeholder="Address Line2"
+        <input type="text" name="address" class="form-control" placeholder="Address Line"
   </div>
   <div class="form-group3" style="width 40;">
         <input type="text" name="city" class="form-control" placeholder="City"
@@ -96,7 +93,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </form>
 
-  <a style= "margin: 1em; float: left;" type="submit" class="btn btn-primary" href="view_orders.php" name="placeorder">Place Order</a>
+  <a style= "margin: 1em; float: left;" type="submit" class="btn btn-primary" href="orders.php" name="placeorder">Place Order</a>
 
 <?php
 
@@ -114,10 +111,10 @@ if(isset($_POST["submit"])) {
             flash("Please select a payment method.");
         }
     }
-    $streetAdr = $_POST["adr"];
+    $streetAdr = $_POST["address"];
     $words = explode(" ", $streetAdr);
     if (gettype($words[0] == "integer") && (sizeof($words) >= 3) && (is_string($_POST["city"])) && (is_string($_POST["state"]))) {
-        $adr = $_POST["adr"] . ", " . $_POST["city"] . ", " .$_POST["state"]."  ".$_POST["zip"];
+        $adr = $_POST["address"] . ", " . $_POST["city"] . ", " .$_POST["state"]."  ".$_POST["zip"];
     } else {
         flash("Please enter an  address.");
     }
