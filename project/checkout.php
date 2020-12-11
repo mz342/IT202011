@@ -19,7 +19,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <form>
   <div class="form-group1">
 
-<h1 >1. Payment Method</h1>
+<h1 > Payment Method</h1>
 
   </div>
   <div class="form-group2">
@@ -30,7 +30,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <option value="visa">Visa</option>    </select>
 <br>
   </div>
-<h2> 2.Shipping Information</h2>
+<h2> Shipping Information</h2>
  </div>
   <div class="form-group3" style="width 40;">
         <input type="text" name="addressLine1" class="form-control" placeholder="Address Line1"
@@ -53,7 +53,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="results">
         <div class="list-group">
             <div>
-                <div><h3> 3. Review Products</h3></div>
+                <div><h3> Review Products</h3></div>
             </div>
             <div>
                 <br>
@@ -96,14 +96,9 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </form>
 
-<button id="placeOrder" type="submit" name="submit" value="Submit">Place Order</button>
+  <a style= "margin: 1em; float: left;" type="submit" class="btn btn-primary" href="view_orders.php" name="placeorder">Place Order</a>
 
 <?php
-
-
-
-
-
 
 
 if(isset($_POST["submit"])) {
