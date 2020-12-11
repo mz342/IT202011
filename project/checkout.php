@@ -93,7 +93,7 @@ $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 </form>
 
-  <a style= "margin: 1em; float: left;" type="submit" class="btn btn-primary" href="orders.php" name="placeorder">Place Order</a>
+    <button id="placeOrder" type="submit" class="btn btn-primary"  name="submit" value="Submit">Place Order</button>
 
 <?php
 
@@ -137,7 +137,7 @@ if(isset($_POST["submit"])) {
     if ($adr && ($payment!="-1") && $validOrder) {
 
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Orders (user_id,total_price,created,address,payment_method) VALUES(:user,:price,:cr,:adr,:pay)");
+        $stmt = $db->prepare("INSERT INTO Orders (user_id,price,created,address,PaymentMethod) VALUES(:user,:price,:cr,:adr,:pay)");
         $r = $stmt->execute([
             ":user"=>$id,
             ":price"=>$price,
@@ -186,7 +186,6 @@ if(isset($_POST["submit"])) {
 }
 
 ?>
-
 
 
 
