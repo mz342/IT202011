@@ -1,8 +1,4 @@
-<<<<<<< HEAD
  <?php require_once(__DIR__ . "/partials/nav.php"); ?>
-=======
-<?php require_once(__DIR__ . "/partials/nav.php"); ?>
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 <?php
 if (!has_role("Admin")) {
     //this will redirect to login and kill the rest of this script (prevent it from executing)
@@ -20,19 +16,15 @@ if (!has_role("Admin")) {
 	<input type="number" min="0" name="quantity"/>
 	<label>Description</label>
 	<input type="text" name="description"/>
-<<<<<<< HEAD
 	<label>Category</label>
 	<input type="text" name="category"/>
 	<label>Visibility</label>
 	<input type="number" min="0" name="visibility"/>
-=======
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 	<input type="submit" name="save" value="Create"/>
 </form>
 
 <?php
 if(isset($_POST["save"])){
-<<<<<<< HEAD
 	//TODO add proper validation/checks
 	$name = $_POST["name"];
 	// $state = $_POST["state"];
@@ -45,26 +37,14 @@ if(isset($_POST["save"])){
 	$user = get_user_id();
 	$db = getDB();
 	$stmt = $db->prepare("INSERT INTO Products (name, price, quantity, description, category, visibility, user_id) VALUES(:name, :pr, :quantity, :desc, :category, :visibility, :user)");
-=======
-	$name = $_POST["name"];
-	$pr = $_POST["price"];
-	$quantity = $_POST["quantity"];
-	$desc = $_POST["description"];
-	$user = get_user_id();
-	$db = getDB();
-	$stmt = $db->prepare("INSERT INTO Products (name, price, quantity, description, user_id) VALUES(:name, :pr, :quantity, :desc, :user)");
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 	$r = $stmt->execute([
 		":name"=>$name,
 		":pr"=>$pr,
 		":quantity"=>$quantity,
 		":desc"=>$desc,
-<<<<<<< HEAD
 		//":nst"=>$nst,
 		":category"=>$category,
 		":visibility"=>$visibility,
-=======
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 		":user"=>$user
 	]);
 	if($r){

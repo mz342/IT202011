@@ -17,7 +17,6 @@ if(isset($_GET["id"])){
 if(isset($_POST["save"])){
 	//TODO add proper validation/checks
 	$name = $_POST["name"];
-<<<<<<< HEAD
 	$quan = $_POST["quantity"];
 	$price = $_POST["price"];
 	$desc = $_POST["description"];
@@ -38,26 +37,6 @@ if(isset($_POST["save"])){
 			":category"=>$category,
 			":visibility"=>$visibility,
 			":id"=>$id
-=======
-	// $state = $_POST["state"];
-	$pr = $_POST["price"];
-	$quantity = $_POST["quantity"];
-	$desc = $_POST["description"];
-	//$nst = date('Y-m-d H:i:s');//calc
-	$user = get_user_id();
-	$db = getDB();
-	if(isset($id)){
-		$stmt = $db->prepare("UPDATE Products set name=:name, price=:pr, quantity=:quantity, description=:desc where id=:id");
-		//$stmt = $db->prepare("INSERT INTO F20_Eggs (name, state, base_rate, mod_min, mod_max, next_stage_time, user_id) VALUES(:name, :state, :br, :min,:max,:nst,:user)");
-		$r = $stmt->execute([
-            ":name"=>$name,
-            ":pr"=>$pr,
-            ":quantity"=>$quantity,
-            ":desc"=>$desc,
-            ":id"=>$id,
-            //":nst"=>$nst,
-            //":user"=>$user
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 		]);
 		if($r){
 			flash("Updated successfully with id: " . $id);
@@ -87,7 +66,6 @@ if(isset($id)){
 <form method="POST">
 	<label>Name</label>
 	<input name="name" placeholder="Name" value="<?php echo $result["name"];?>"/>
-<<<<<<< HEAD
 	<label>Quantity</label>
 	<input type="number" min="1" name="quantity" value="<?php echo $result["quantity"];?>"=/>
 	<label>Price</label>
@@ -98,15 +76,6 @@ if(isset($id)){
 	<input name="category" placeholder="Category" value="<?php echo $result["category"];?>"/>
 	<label>Visibility</label>
 	<input type ="number" min="0" name="visibility"/>
-=======
-	
-	<label>Price</label>
-	<input type="number" min="0" name="price"/>
-	<label>Quantity</label>
-	<input type="number" min="0" name="quantity"/>
-	<label>Description</label>
-	<input type="text" name="description"/>
->>>>>>> 6e4522b2eb92a26e4e022b1840a5c7724e90857a
 	<input type="submit" name="save" value="Update"/>
 </form>
 
