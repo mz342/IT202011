@@ -18,7 +18,7 @@ $orderResult = $stmt->fetch(PDO::FETCH_ASSOC);
 if(!has_role("Admin")){
     $userID = get_user_id();
     $db = getDB();
-    $stmt = $db->prepare("SELECT price,created,address FROM Orders where user_id=:id ORDER by created DESC LIMIT 10");
+    $stmt = $db->prepare("SELECT price,created,Address FROM Orders where user_id=:id ORDER by created DESC LIMIT 10");
     $stmt->bindValue(":id", $userID);
     $stmt->execute();
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -69,9 +69,6 @@ if(!has_role("Admin")){
                     <div>Order ID: <?php safer_echo($order["id"]); ?></div>
                 </div>
                 <div>
-                    <div>User ID: <?php safer_echo($order["user_id"]); ?><?php echo " ";?><a type="button" href="profile.php?id=<?php safer_echo($order["user_id"]); ?>">View Profile</a></div>
-                </div>
-                <div>
                     <div>Order Date: <?php safer_echo($order["created"]); ?></div>
                 </div>
                 <div>
@@ -88,7 +85,6 @@ if(!has_role("Admin")){
                 </div>
             </div>
         <?php endforeach; ?>
-        <div><b>Total Revenue: $<?php safer_echo($revenue);?></b></div>
     <?php endif; ?>
 </div>
 <?php require(__DIR__ . "/partials/flash.php");
