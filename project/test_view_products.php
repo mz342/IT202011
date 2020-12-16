@@ -28,6 +28,27 @@ if (isset($product_id)) {
     }
 }
 
+if((isset($_POST["review"]) && isset($_POST["stars"])) && isset($_POST["reviewing"])){
+  $r = $_POST["review"];
+  $s = $_POST["stars"];
+
+  $stmt = $db->prepare("INSERT INTO Ratings (product_id, user_id, rating, comment) VALUES (:pid, :uid, :r, :c )");
+  $r = $stmt->execute([":pid" => $product_id,
+                      ":uid" => get_user_id(),
+                      ":r" => $s,
+                      ":c" => $r]);
+  if($r)
+    flash("Thank you for your feedback!");
+  else
+  flash("there was a problem with your review, please try again.");
+}
+
+//grabing all my reviews
+$stmt = $db->prepare("SELECT Ratings.comment,Ratings.rating, Ratings.created, Ratings.user_id, Users.username FROM Ratings JOIN Users on Ratings.user_id = Users.id WHERE Ratings.product_id = :id");
+$r = $stmt->execute([":id" => $product_id]);
+$rating = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+
 
 ?>
 <script>
@@ -58,8 +79,6 @@ if (isset($product_id)) {
     <h3>View product details</h3>
 
 
-    
-
     <?php if (isset($result) && !empty($result)): ?>
       <div class="row row-cols-1 row-cols-md-2">
         <div class="col mb-4">
@@ -89,6 +108,47 @@ if (isset($product_id)) {
             </div>
           </div>
         </div>
+
+<form method="POST">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Please give us feedback on the product you purchased!</h5>
+                  <label for="exampleFormControlInput1" class="form-label"></label>
+                  <input type="text" name="review" class="form-control" id="exampleFormControlInput1" placeholder="comment about our product" required>
+			<br>
+                  <select class="form-control" id="quantity" name="stars" style= "width: 70;">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                  </select>
+			<br>
+                  <button type="submit" name = "reviewing" class="btn btn-primary btn-lg">Post Review</button>
+			<br>
+                <div>
+              </div>
+            </form>
+
+
+
+<h1> Review Product </h1>
+          <?php foreach ($rating as $r):?>
+            <div class="card-group">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title"><a href=" profile.php?id= <?php echo $r["user_id"];?>"><?php echo $r["username"];?></a></h5>
+
+              <p class="card-text"><?php echo $r["rating"];?>/5</p>
+              <p class="card-text"><?php echo $r["comment"];?></p>
+              <p class="card-text"><small class="text-muted"><?php echo $r["created"];?></small></p>
+            </div>
+          </div>
+          </div>
+        <?php endforeach ?>
+
+
+
       <?php else: ?>
         <p>Error looking up id...</p>
       <?php endif; ?>
