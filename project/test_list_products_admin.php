@@ -1,58 +1,77 @@
 <?php require_once(__DIR__ . "/partials/nav.php"); ?>
+
 <?php
-if (!has_role("Admin")) {
-    //this will redirect to login and kill the rest of this script (prevent it from executing)
-    flash("You don't have permission to access this page");
-    die(header("Location: login.php"));
-}
-?>
-<?php
-$query = "";
+
 $results = [];
-if (isset($_POST["query"])) {
-    $query = $_POST["query"];
+$low = 0;
+$db = getDB();
+
+
+
+if (has_role("Admin")) {
+  if (isset($_POST["stock"])) {
+    $stmt = $db->prepare("SELECT id,name, price, description, quantity FROM Products WHERE quantity = 0  ORDER BY price LIMIT 10");
+    $r = $stmt->execute();
+  }
+  elseif (isset($_POST["sort"])) {
+    $stmt = $db->prepare("SELECT AVG(Ratings.rating) as rating,Products.id as id, Products.name, Products.description, Products.quantity,Products.price  FROM Ratings JOIN Products on Products.id = Ratings.product_id GROUP BY product_id");
+    $r = $stmt->execute();
+
+
+  }
+  elseif (isset($_POST["quantity"])) {
+    $low = $_POST["quantity"];
+    $stmt = $db->prepare("SELECT AVG(rating), product_id FROM `Ratings` GROUP BY product_id");
+    $r = $stmt->execute( [":q" => $low]);
+  }else{
+    $stmt = $db->prepare("SELECT id,name, price, description, quantity FROM Products  LIMIT 10");
+    $r = $stmt->execute();
+  }
 }
-if (isset($_POST["search"]) && !empty($query)) {
-    $db = getDB();
-    $stmt = $db->prepare("SELECT id,name,price, user_id from Products WHERE name like :q LIMIT 10");
-    $r = $stmt->execute([":q" => "%$query%"]);
-    if ($r) {
-        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    else {
-        flash("There was a problem fetching the results");
-    }
+
+if ($r) {
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+else {
+    flash("There was a problem fetching the products " . var_export($stmt->errorInfo(), true));
+}
+
+
+
 ?>
-<form method="POST">
-    <input name="query" placeholder="Search" value="<?php safer_echo($query); ?>"/>
-    <input type="submit" value="Search" name="search"/>
-</form>
-<div class="results">
-    <?php if (count($results) > 0): ?>
-        <div class="list-group">
-            <?php foreach ($results as $r): ?>
-                <div class="list-group-item">
-                    <div>
-                        <div>Name:</div>
-                        <div><?php safer_echo($r["name"]); ?></div>
-                    </div>
-                    <div>
-                        <div>Price:</div>
-                        <div><?php safer_echo($r["price"]); ?></div>
-                    </div>
-                    <div>
-                        <div>Owner Id:</div>
-                        <div><?php safer_echo($r["user_id"]); ?></div>
-                    </div>
-                    <div>
-                        <a type="button" href="test_edit_products.php?id=<?php safer_echo($r['id']); ?>">Edit</a>
-                        <a type="button" href="test_view_products.php?id=<?php safer_echo($r['id']); ?>">View</a>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+
+  <form method="POST">
+      <label for="input">quantity</label>
+      <input type="input" name="quantity" class="form-control" id="quantity" aria-describedby="emailHelp" required>
+    <button id="submit" type="submit" class="btn btn-primary" name="quantity" value="quantity">Find</button>
+  </form>
+  <form method="POST">
+    <button id="submit" type="submit" class="btn btn-primary" name="stock" value="stock">View Stock</button>
+    <button id="submit" type="submit" class="btn btn-primary" name="sort" value="sort">Sort Rating</button>
+  </form>
+
+
+
+
+<h1>View Products</h1>
+<div class="row" style= "margin-left: 2em;">
+<?php if (count($results) > 0): ?>
+    <?php foreach ($results as $r): ?>
+      <div   class="card" style="width: 20rem; margin: 1em;">
+        <div class="card-body">
+          <a href = "test_view_products.php?id=<?php safer_echo($r['id']); ?>" <h5 class="card-title"><?php safer_echo($r["name"]); ?></h5></a>
+          <h6 class="card-title"><?php safer_echo($r["price"]); ?></h6>
+          <p class="card-text"><?php safer_echo($r["description"]); ?></p>
+          <p class="card-text"> quantity = <?php safer_echo($r["quantity"]); ?></p>
+          <?php if (isset($_POST["sort"])): ?>
+          <p class="card-text"> rating: <?php safer_echo($r["rating"]); ?></p>
+        <?php endif?>
+          <?php if (has_role("Admin")): ?>
+            <a href="test_edit_products.php?id=<?php safer_echo($r['id']); ?>" class="btn btn-primary">Edit</a>
+          <?php endif; ?>
+          </div>
         </div>
-    <?php else: ?>
-        <p>No results</p>
-    <?php endif; ?>
+<?php endforeach; ?>
+<?php endif; ?>
 </div>
+<?php require_once(__DIR__ . "/partials/flash.php"); ?>
